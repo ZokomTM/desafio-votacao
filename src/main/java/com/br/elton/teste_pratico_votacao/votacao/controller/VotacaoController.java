@@ -9,6 +9,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/votacoes")
 public class VotacaoController {
@@ -21,5 +23,10 @@ public class VotacaoController {
     public ResponseEntity<ApiResponse<Voto>> votar(@PathVariable Long pautaId, @RequestBody RegistrarVoto registrarVoto) {
         var pauta = pautaService.buscarPautaPorId(pautaId);
         return ResponseEntity.ok(votacaoService.contabilizar(pauta, registrarVoto.cpfAssociado(), registrarVoto.voto()));
+    }
+
+    @GetMapping("/{pautaId}")
+    public ResponseEntity<ApiResponse<List<Voto>>> listar(@PathVariable Long pautaId) {
+        return ResponseEntity.ok(votacaoService.listarPorPauta(pautaId));
     }
 }

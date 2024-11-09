@@ -15,7 +15,11 @@ public class CpfService {
         if (!isValid) {
             return new CpfResponse("CPF inválido", 404);
         } else {
-            return new CpfResponse(randomVotingStatus(), 200);
+            if(randomVotingStatus()){
+                return new CpfResponse("ABLE_TO_VOTE", 200);
+            }else {
+                return new CpfResponse("UNABLE_TO_VOTE", 404);
+            }
         }
     }
 
@@ -25,7 +29,7 @@ public class CpfService {
         return cleanCpf.length() == 11 && cleanCpf.matches("\\d{11}");
     }
 
-    private String randomVotingStatus() {
-        return random.nextBoolean() ? "ABLE_TO_VOTE" : "UNABLE_TO_VOTE";
+    private Boolean randomVotingStatus() {
+        return random.nextBoolean();
     }
 }

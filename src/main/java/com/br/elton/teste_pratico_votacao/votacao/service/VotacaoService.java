@@ -9,6 +9,8 @@ import com.br.elton.teste_pratico_votacao.votacao.response.ApiResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class VotacaoService {
     @Autowired
@@ -28,15 +30,15 @@ public class VotacaoService {
             return new ApiResponse<>(null, "Associado já votou nessa pauta", false);
         }
 
-        if (cpfResponse.getMessage() != "ABLE_TO_VOTE") {
-            return new ApiResponse<>(null, "Associado não liberado para voto.", false);
-        }
-
         Voto voto = new Voto();
         voto.setPauta(pauta);
         voto.setCpfAssociado(cpfAssociado);
         voto.setVoto(tipoVoto);
 
         return new ApiResponse<>(votoRepository.save(voto), "Voto contabilizado.", true);
+    }
+
+    public ApiResponse<List<Voto>> listarPorPauta(Long pautaId) {
+        return new ApiResponse<>(votoRepository.findAllByPautaId(pautaId), "Listagem Votos.", true);
     }
 }
