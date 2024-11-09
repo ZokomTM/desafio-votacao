@@ -1,29 +1,42 @@
 package com.br.elton.teste_pratico_votacao.votacao.service;
 
+import com.br.elton.teste_pratico_votacao.cpf.response.CpfResponse;
+import com.br.elton.teste_pratico_votacao.cpf.service.CpfService;
 import com.br.elton.teste_pratico_votacao.votacao.model.Pauta;
 import com.br.elton.teste_pratico_votacao.votacao.model.Voto;
 import com.br.elton.teste_pratico_votacao.votacao.repository.VotoRepository;
+import com.br.elton.teste_pratico_votacao.votacao.response.ApiResponse;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
 public class VotacaoService {
-    private final VotoRepository votoRepository;
+    @Autowired
+    private VotoRepository votoRepository;
 
-    public VotacaoService(VotoRepository votoRepository) {
-        this.votoRepository = votoRepository;
-    }
+    @Autowired
+    private CpfService cpfService;
 
-    public Voto registrarVoto(Pauta pauta, String cpfAssociado, Voto.TipoVoto tipoVoto) {
-        if (votoRepository.existsByPautaIdAndCpfAssociado(pauta.getId(), cpfAssociado)) {
-            throw new RuntimeException("Associado já votou nessa pauta");
+    public ApiResponse<Voto> contabilizar(Pauta pauta, String cpfAssociado, Voto.TipoVoto tipoVoto) {
+
+        CpfResponse cpfResponse = cpfService.validateCPF(cpfAssociado);
+        if (cpfResponse.getStatusCode() == 404) {
+            return new ApiResponse<>(null, "CPF inválido. Não é possível contabilizar o voto.", false);
         }
 
-        // validar CPF numa api mockada
+        if (votoRepository.existsByPautaIdAndCpfAssociado(pauta.getId(), cpfAssociado)) {
+            return new ApiResponse<>(null, "Associado já votou nessa pauta", false);
+        }
+
+        if (cpfResponse.getMessage() != "ABLE_TO_VOTE") {
+            return new ApiResponse<>(null, "Associado não liberado para voto.", false);
+        }
 
         Voto voto = new Voto();
         voto.setPauta(pauta);
         voto.setCpfAssociado(cpfAssociado);
         voto.setVoto(tipoVoto);
-        return votoRepository.save(voto);
+
+        return new ApiResponse<>(votoRepository.save(voto), "Voto contabilizado.", true);
     }
 }

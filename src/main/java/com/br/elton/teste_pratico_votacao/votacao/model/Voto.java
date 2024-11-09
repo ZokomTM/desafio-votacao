@@ -3,7 +3,7 @@ package com.br.elton.teste_pratico_votacao.votacao.model;
 import lombok.Getter;
 import lombok.Setter;
 
-import javax.persistence.*;
+import jakarta.persistence.*;
 import java.time.LocalDateTime;
 
 @Entity
