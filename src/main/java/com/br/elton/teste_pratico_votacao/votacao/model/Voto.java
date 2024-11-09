@@ -14,7 +14,7 @@ public class Voto {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private Long associadoId;
+    private Long cpfAssociado;
 
     @Enumerated(EnumType.STRING)
     private TipoVoto voto;
