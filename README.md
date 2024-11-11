@@ -1,3 +1,102 @@
+# Banco de Dados
+
+Deixei meu banco de dados Postgre rodando na cloud, ele já está configurado corretamente, porem caso no momento do teste
+não esteja disponível, basta alterar as informações para conexão no arquivo
+application.properties
+
+spring.datasource.url={urlJDBC}
+spring.datasource.username={usuarioBanco}
+spring.datasource.password={senhaBanco}
+
+# Segue documentação das Apis criadas e de como testalas
+
+## API Reference
+
+#### Criar Pauta
+"baseURL": "http://localhost:8080"
+
+```http
+  POST {{ _.baseURL }}/pautas
+```
+
+| Body | Type     | Description                |
+| :-------- | :------- | :------------------------- |
+| `titulo` | `string` | **Required**. Titulo da Pauta |
+| `descricao` | `string` | **Required**. Descrição da Pauta |
+
+#### Editar Pauta
+
+```http
+  POST {{ _.baseURL }}/pautas/{pautaId}
+```
+
+| Body | Type     | Description                |
+| :-------- | :------- | :------------------------- |
+| `titulo` | `string` | **Required**. Titulo da Pauta |
+| `descricao` | `string` | **Required**. Descrição da Pauta |
+
+#### Retorna todas as Pautas
+
+```http
+  GET {{ _.baseURL }}/pautas
+```
+
+| Parâmetro   | Tipo       | Descrição                           |
+| :---------- | :--------- | :---------------------------------- |
+| `api_key` | `string` | **Obrigatório**. A chave da sua API |
+
+
+#### Iniciar uma Sessão
+
+```http
+  POST {{ _.baseURL }}/sessao/{pautaId}?minutos={tempoMinutos}
+```
+
+| Parâmetro   | Tipo       | Descrição                           |
+| :---------- | :--------- | :---------------------------------- |
+| `pautaId` | `long` | **Obrigatório**. Id da Pauta |
+| `tempoMinutos` | `int` | **Obrigatório**. Quantidade de minutos que serão adicionados a sessão |
+
+
+#### Incrementar tempo a sessão
+
+```http
+  POST {{ _.baseURL }}/sessao/{pautaId}/incrementar?minutos={tempoMinutos}
+```
+
+| Parâmetro   | Tipo       | Descrição                           |
+| :---------- | :--------- | :---------------------------------- |
+| `pautaId` | `long` | **Obrigatório**. Id da Pauta |
+| `tempoMinutos` | `int` | **Obrigatório**. Quantidade de minutos que serão adicionados a sessão |
+
+
+#### Retorna todas as sessões
+
+```http
+  GET {{ _.baseURL }}/sessao
+```
+
+#### Executar voto
+
+```http
+  POST {{ _.baseURL }}/votacoes/{pautaId}/voto
+```
+
+| Parâmetro | Type     | Description                |
+| :-------- | :------- | :------------------------- |
+| `cpfAssociado` | `string` | **Required**. Cpf do associado |
+| `voto` | `string` | **Required**. Voto (SIM ou NAO) |
+
+#### Retorna todos os votos referente de uma Pauta
+
+```http
+  GET {{ _.baseURL }}/votacoes/{pautaId}
+```
+
+| Parâmetro   | Tipo       | Descrição                           |
+| :---------- | :--------- | :---------------------------------- |
+| `pautaId` | `long` | **Obrigatório**. Id da Pauta |
+
 # Votação
 
 ## Objetivo
