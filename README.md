@@ -24,16 +24,26 @@ spring.datasource.password={senhaBanco}
 | `titulo` | `string` | **Required**. Titulo da Pauta |
 | `descricao` | `string` | **Required**. Descrição da Pauta |
 
+{
+"titulo": "Exemplo de titulo",
+"descricao": "Exemplo de descrição"
+}
+
 #### Editar Pauta
 
 ```http
-  POST {{ _.baseURL }}/pautas/{pautaId}
+  PUT {{ _.baseURL }}/pautas/{pautaId}
 ```
 
 | Body | Type     | Description                |
 | :-------- | :------- | :------------------------- |
 | `titulo` | `string` | **Required**. Titulo da Pauta |
 | `descricao` | `string` | **Required**. Descrição da Pauta |
+
+{
+"titulo": "Exemplo de alterar titulo",
+"descricao": "Exemplo de alterar descrição"
+}
 
 #### Retorna todas as Pautas
 
@@ -86,6 +96,11 @@ spring.datasource.password={senhaBanco}
 | :-------- | :------- | :------------------------- |
 | `cpfAssociado` | `string` | **Required**. Cpf do associado |
 | `voto` | `string` | **Required**. Voto (SIM ou NAO) |
+
+{
+"cpfAssociado": "999.999.999-99",
+"voto": "SIM"
+}
 
 #### Retorna todos os votos referente de uma Pauta
 
